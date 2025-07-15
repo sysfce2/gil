@@ -22,10 +22,10 @@ jobs:
           install: >-
             git
             make
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-doxygen
-            mingw-w64-x86_64-graphviz
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-doxygen
+            mingw-w64-ucrt-x86_64-graphviz
             msys2-w32api-runtime
             python3-pip
 
@@ -34,7 +34,7 @@ jobs:
 
       - name: "Setup gil"
         run: |
-          pip3 install gil
+          pip3 install gil --break-system-packages
           cd sample
           gil update
 
