@@ -29,6 +29,7 @@ jobs:
       - name: "Setup gil"
         run: |
           pip3 install gil
+          cd sample
           gil update
 
       - name: "Doxygen version"
