@@ -21,6 +21,7 @@ This tool provides a solution to the [git recursive submodules dependency proble
   * [Requirements](#requirements)
   * [Setup](#setup)
   * [Sample](#sample)
+  * [Sample with recursion](#sample-with-recursion)
   * [Usage](#usage)
   * [Motivation: git submodules vs git links](#motivation-git-submodules-vs-git-links)
     * [Git submodules management](#git-submodules-management)
@@ -39,7 +40,7 @@ This tool provides a solution to the [git recursive submodules dependency proble
 # Setup
 
 ```shell
-sudo pip3 install --prefix /usr/local gil
+pip3 install gil
 ```
 
 # Sample
@@ -209,6 +210,51 @@ Finally you can build sample projects with provided build scripts:
 Additionally each module can be cloned and successfully build without root
 repository. In this case local .gitlinks file will be used to resolve all
 dependencies!
+
+#Sample with recursion
+If you have some repositories with cycle references, then you need to prepare 
+a root repository and place them into it:
+
+[gil-test-root](https://github.com/chronoxor/gil-test-root.git) with .gitlinks file:
+```
+gil-test-A gil-test-A https://github.com/chronoxor/gil-test-A.git main
+gil-test-B gil-test-B https://github.com/chronoxor/gil-test-B.git main
+```
+
+[gil-test-A](https://github.com/chronoxor/gil-test-A.git) with .gitlinks file:
+```
+gil-test-B externals/gil-test-B https://github.com/chronoxor/gil-test-B.git main
+```
+
+[gil-test-B](https://github.com/chronoxor/gil-test-B.git) with .gitlinks file:
+```
+gil-test-A externals/gil-test-A https://github.com/chronoxor/gil-test-A.git main
+```
+
+Then you need to just clone [gil-test-root](https://github.com/chronoxor/gil-test-root.git) and run `gil update` and all works:
+```
+/home/user/gil-test-root$ gil update
+Working path: /home/user/gil-test-root
+Discover git links: /home/user/gil-test-root/.gitlinks
+Running git clone https://github.com/chronoxor/gil-test-A.git branch "main" into /home/user/gil-test-root/gil-test-A
+Cloning into '/home/user/gil-test-root/gil-test-A'...
+remote: Enumerating objects: 6, done.
+remote: Counting objects: 100% (6/6), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 6 (delta 0), reused 6 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (6/6), done.
+Discover git links: /home/user/gil-test-root/gil-test-A/.gitlinks
+Running git clone https://github.com/chronoxor/gil-test-B.git branch "main" into /home/user/gil-test-root/gil-test-B
+Cloning into '/home/user/gil-test-root/gil-test-B'...
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (3/3), done.
+Discover git links: /home/user/gil-test-root/gil-test-B/.gitlinks
+Create git link: /home/user/gil-test-root/gil-test-B -> /home/user/gil-test-root/gil-test-A/externals/gil-test-B
+Create git link: /home/user/gil-test-root/gil-test-A -> /home/user/gil-test-root/gil-test-B/externals/gil-test-A
+```
 
 # Usage
 Gil (git links) tool supports the following commands:
