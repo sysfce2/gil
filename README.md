@@ -211,7 +211,7 @@ Additionally each module can be cloned and successfully build without root
 repository. In this case local .gitlinks file will be used to resolve all
 dependencies!
 
-#Sample with recursion
+# Sample with recursion
 If you have some repositories with cycle references, then you need to prepare 
 a root repository and place them into it:
 
@@ -231,7 +231,7 @@ gil-test-B externals/gil-test-B https://github.com/chronoxor/gil-test-B.git main
 gil-test-A externals/gil-test-A https://github.com/chronoxor/gil-test-A.git main
 ```
 
-Then you need to just clone [gil-test-root](https://github.com/chronoxor/gil-test-root.git) and run `gil update` and all works:
+Then you need to just clone [gil-test-root](https://github.com/chronoxor/gil-test-root.git), run `gil update` and all works:
 ```
 /home/user/gil-test-root$ gil update
 Working path: /home/user/gil-test-root
